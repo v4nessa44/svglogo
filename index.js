@@ -1,6 +1,7 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 const { document } = require('svg.js');
+const {Triangle, Circle, Square} = require('./lib/shape');
 
 inquirer
     .prompt([
@@ -27,15 +28,25 @@ inquirer
         },
     ])
     .then(answers => {
+        let shape;
+        if(answers.shape =='circle'){
+        shape = new Circle(answers.shapeColor, answers.text, answers.textColor)
+        }
+        else if(answers.shape =='triangle'){
+        shape = new Triangle(answers.shapeColor, answers.text, answers.textColor)
+        }
+        else if(answers.shape =='square'){
+            shape = new Square(answers.shapeColor, answers.text, answers.textColor)
+            }
         // Create an SVG document
-        const svg = document.createDocument().size(300, 200);
+        //const svg = document.createDocument().size(300, 200);
 
         // Add your text and shape elements to the SVG
         // You will need to use the answers to set the properties of these elements.
 
         // Save the SVG to a file named 'logo.svg'
-        const svgString = svg.svg();
-        fs.writeFileSync('logo.svg', svgString);
+        //const svgString = svg.svg();
+        fs.writeFileSync('logo.svg', shape.render());
 
         console.log('Generated logo.svg');
     })
